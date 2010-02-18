@@ -1,0 +1,37 @@
+RoutingParamsFilters
+====================
+
+This plugin enables the ability of adding filters, or sending methods to the parameters you are expecting to read from the URL. It's useful if you are expecting to read an integer, a collection of values, etc.
+
+Example
+=======
+
+In your routes.rb file:
+
+    ActionController::Routing::Routes.draw do |map|
+
+      map.connect "/something/:something_id",
+                :controller => 'some',
+                :action     => 'create',
+                :conditions => { :method => :post, :something_id => :to_i }
+      
+      ...
+      
+    end
+  
+Then:
+    curl -X POST "http://localhost:3000/something/123"
+    Parameters: {"action"=>"create", "something_id"=>123, "controller"=>"entries"}
+
+You can even do other things like
+    map.connect "/something/:something_id",
+              :controller => 'some',
+              :action     => 'create',
+              :conditions => { :method => :post, :something_id => "split(',')" }
+
+So:
+    curl -X POST "http://localhost:3000/something/123,456,789"
+    Parameters: {"action"=>"create", "something_id"=>["123","456","789"], "controller"=>"entries"}
+
+
+Copyright (c) 2010 Ivan Valdes Castillo, released under the MIT license
